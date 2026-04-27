@@ -1,0 +1,38 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Medications.CreateModel
+@{
+    ViewData["Title"] = "Registrer Medicin";
+}
+
+<h1>Registrer Medicin</h1>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.PatientId">Patient</label>
+        <select asp-for="Input.PatientId" asp-items="Model.Patients" class="form-control form-control-lg"></select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Name">Medicin navn</label>
+        <input asp-for="Input.Name" class="form-control form-control-lg" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Dosage">Dosis</label>
+        <input asp-for="Input.Dosage" class="form-control form-control-lg" placeholder="f.eks. 100mg" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.Frequency">Frekvens</label>
+        <input asp-for="Input.Frequency" class="form-control form-control-lg" placeholder="f.eks. Morgen og aften" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Input.TimeOfDay">Tidspunkt</label>
+        <input asp-for="Input.TimeOfDay" class="form-control form-control-lg" type="time" />
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg">💾 Gem</button>
+</form>

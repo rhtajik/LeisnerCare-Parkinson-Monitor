@@ -1,0 +1,39 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Patients.IndexModel
+@{
+    ViewData["Title"] = "Patienter";
+}
+
+<h1>Patient Oversigt</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary btn-lg">➕ Ny Patient</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Navn</th>
+            <th>CPR</th>
+            <th>Fødselsdato</th>
+            <th>Diagnose</th>
+            <th>Kontakt</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var patient in Model.Patients)
+        {
+            <tr>
+                <td>@patient.User?.FirstName @patient.User?.LastName</td>
+                <td>@patient.CprNumber</td>
+                <td>@patient.DateOfBirth.ToShortDateString()</td>
+                <td>@patient.DiagnosisDate.ToShortDateString()</td>
+                <td>@patient.ContactPhone</td>
+                <td>
+                    <a asp-page="Details" asp-route-id="@patient.Id" class="btn btn-info btn-lg">Detaljer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

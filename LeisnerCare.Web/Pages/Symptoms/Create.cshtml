@@ -1,0 +1,69 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Symptoms.CreateModel
+@{
+    ViewData["Title"] = "Registrer Symptom";
+}
+
+<h1>Registrer Symptom</h1>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group mb-4">
+        <label asp-for="Input.Type" class="form-label fs-4">Symptomtype</label>
+        <select asp-for="Input.Type" class="form-control form-control-lg"
+                asp-items="Html.GetEnumSelectList<LeisnerCare.Core.Entities.SymptomType>()"
+                onchange="updateScale()">
+        </select>
+    </div>
+
+    <div class="form-group mb-4" id="scaleContainer">
+        <label asp-for="Input.Value" class="form-label fs-4">Niveau</label>
+        <div class="d-flex gap-2">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <button type="button" class="btn btn-outline-primary btn-lg fs-3 px-4"
+                        onclick="selectValue(@i)">
+                    @i
+                </button>
+            }
+        </div>
+        <input asp-for="Input.Value" type="hidden" id="valueInput" />
+        <div id="onOffButtons" class="d-none d-flex gap-2">
+            <button type="button" class="btn btn-success btn-lg" onclick="selectValue(0)">ON ✅</button>
+            <button type="button" class="btn btn-danger btn-lg" onclick="selectValue(1)">OFF ❌</button>
+            <button type="button" class="btn btn-warning btn-lg" onclick="selectValue(2)">DYSKINESI</button>
+        </div>
+    </div>
+
+    <div class="form-group mb-4">
+        <label asp-for="Input.Note" class="form-label fs-4">Notat (valgfrit)</label>
+        <textarea asp-for="Input.Note" class="form-control form-control-lg" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg fs-4 px-5">💾 Gem</button>
+</form>
+
+@section Scripts {
+    <script>
+        function selectValue(val) {
+            document.getElementById('valueInput').value = val;
+            document.querySelectorAll('#scaleContainer button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function updateScale() {
+            const type = document.querySelector('[name="Input.Type"]').value;
+            const scale = document.getElementById('scaleContainer');
+            const onOff = document.getElementById('onOffButtons');
+
+            if (type === 'OnOff') {
+                onOff.classList.remove('d-none');
+                scale.querySelector('.d-flex.gap-2').classList.add('d-none');
+            } else {
+                onOff.classList.add('d-none');
+                scale.querySelector('.d-flex.gap-2').classList.remove('d-none');
+            }
+        }
+    </script>
+}

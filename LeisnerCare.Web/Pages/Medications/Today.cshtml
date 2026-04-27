@@ -1,0 +1,54 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Medications.TodayModel
+@{
+    ViewData["Title"] = "Dagens Medicin";
+}
+
+<h1>Dagens Medicin</h1>
+
+@foreach (var med in Model.Medications)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4>@med.Name <span class="badge bg-primary">@med.Dosage</span></h4>
+            <p>Frekvens: @med.Frequency</p>
+
+            @if (med.IsTakenToday)
+            {
+                <div class="alert alert-success">
+                    ✅ Taget kl. @med.TakenAt?.ToString("HH:mm")
+                </div>
+
+                if (med.Effectiveness.HasValue)
+                {
+                    <div class="alert alert-info">
+                        Din vurdering: @med.Effectiveness.Value / 5
+                    </div>
+                }
+                else
+                {
+                    <div class="mt-3">
+                        <p class="fw-bold">Hvor effektiv var medicinen?</p>
+                        <form method="post" asp-page-handler="Rate" asp-route-logId="@med.LogId">
+                            <div class="d-flex gap-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <button type="submit" name="effectiveness" value="@i"
+                                            class="btn btn-outline-primary btn-lg fs-4 px-4">
+                                        @i
+                                    </button>
+                                }
+                            </div>
+                        </form>
+                    </div>
+                }
+            }
+            else
+            {
+                <form method="post" asp-page-handler="Take" asp-route-medicationId="@med.Id">
+                    <button type="submit" class="btn btn-success btn-lg">✅ Marker som taget</button>
+                </form>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,40 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Staff.SymptomOverviewModel
+@{
+    ViewData["Title"] = "Symptom Oversigt";
+}
+
+<h1>Symptom Oversigt - Alle Patienter</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Dato</th>
+            <th>Type</th>
+            <th>Værdi</th>
+            <th>Notat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model.Symptoms)
+        {
+            <tr>
+                <td>@s.Patient?.User?.FirstName @s.Patient?.User?.LastName</td>
+                <td>@s.RecordedAt.ToString("dd/MM HH:mm")</td>
+                <td>@s.Type</td>
+                <td>
+                    @if (s.Type == LeisnerCare.Core.Entities.SymptomType.OnOff)
+                    {
+                        @(s.Value == 0 ? "ON" : s.Value == 1 ? "OFF" : "DYSKINESI")
+                    }
+                    else
+                    {
+                        @s.Value
+                    }
+                </td>
+                <td>@s.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>

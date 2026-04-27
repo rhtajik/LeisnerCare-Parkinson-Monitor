@@ -1,0 +1,38 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Symptoms.HistoryModel
+@{
+    ViewData["Title"] = "Symptom Historik";
+}
+
+<h1>Symptom Historik</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Dato</th>
+            <th>Type</th>
+            <th>Værdi</th>
+            <th>Notat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model.Symptoms)
+        {
+            <tr>
+                <td>@s.RecordedAt.ToString("dd/MM yyyy HH:mm")</td>
+                <td>@s.Type</td>
+                <td>
+                    @if (s.Type == LeisnerCare.Core.Entities.SymptomType.OnOff)
+                    {
+                        @(s.Value == 0 ? "ON" : s.Value == 1 ? "OFF" : "DYSKINESI")
+                    }
+                    else
+                    {
+                        @s.Value
+                    }
+                </td>
+                <td>@s.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>

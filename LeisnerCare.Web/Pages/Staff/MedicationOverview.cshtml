@@ -1,0 +1,51 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Staff.MedicationOverviewModel
+@{
+    ViewData["Title"] = "Medicin Oversigt";
+}
+
+<h1>Medicin Oversigt - Alle Patienter</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Medicin</th>
+            <th>Dosis</th>
+            <th>Frekvens</th>
+            <th>Status i dag</th>
+            <th>Effekt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var med in Model.Medications)
+        {
+            <tr>
+                <td>@med.PatientName</td>
+                <td>@med.MedicationName</td>
+                <td>@med.Dosage</td>
+                <td>@med.Frequency</td>
+                <td>
+                    @if (med.TakenToday)
+                    {
+                        <span class="badge bg-success">✅ Taget</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">⏳ Afventer</span>
+                    }
+                </td>
+                <td>
+                    @if (med.Effectiveness.HasValue)
+                    {
+                        <span>@(med.Effectiveness.Value)/5</span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
