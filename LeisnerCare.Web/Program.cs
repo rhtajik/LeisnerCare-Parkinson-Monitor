@@ -47,6 +47,9 @@ builder.Services.AddScoped<SymptomService>();
 builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<MedicationService>();
 
+builder.Services.AddScoped<IObservationRepository, ObservationRepository>();
+builder.Services.AddScoped<ObservationService>();
+
 // ============================================
 
 var app = builder.Build();

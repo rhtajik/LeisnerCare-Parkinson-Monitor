@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Symptom> Symptoms => Set<Symptom>();
     public DbSet<Medication> Medications => Set<Medication>();
     public DbSet<MedicationLog> MedicationLogs => Set<MedicationLog>();
+    public DbSet<Observation> Observations => Set<Observation>();
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -63,6 +65,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.HasOne(e => e.Medication)
                   .WithMany(m => m.Logs)
                   .HasForeignKey(e => e.MedicationId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Observation konfiguration
+        builder.Entity<Observation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Content).HasMaxLength(2000);
+            entity.Property(e => e.AuthorName).HasMaxLength(100);
+            entity.Property(e => e.AuthorRole).HasMaxLength(20);
+            entity.HasOne(e => e.Patient)
+                  .WithMany()
+                  .HasForeignKey(e => e.PatientId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
     }
