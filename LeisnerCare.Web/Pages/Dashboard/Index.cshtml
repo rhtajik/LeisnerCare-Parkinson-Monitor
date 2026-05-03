@@ -1,0 +1,70 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Mit Dashboard";
+}
+
+<h1>Mit Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Tremor over tid (sidste 30 dage)</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="tremorChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>ON/OFF Fordeling</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="onOffChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tremor Chart
+        const tremorCtx = document.getElementById('tremorChart').getContext('2d');
+        new Chart(tremorCtx, {
+            type: 'line',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.TremorData.Select(s => $"\"{s.RecordedAt:dd/MM}\"")))],
+                datasets: [{
+                    label: 'Tremor niveau (1-5)',
+                    data: [@string.Join(",", Model.TremorData.Select(s => s.Value))],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { min: 1, max: 5, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+
+        // ON/OFF Chart
+        const onOffCtx = document.getElementById('onOffChart').getContext('2d');
+        new Chart(onOffCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['ON', 'OFF', 'Dyskinesi'],
+                datasets: [{
+                    data: [@Model.OnOffData["ON"], @Model.OnOffData["OFF"], @Model.OnOffData["DYSKINESI"]],
+                    backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+                }]
+            }
+        });
+    </script>
+}

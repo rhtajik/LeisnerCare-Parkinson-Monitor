@@ -1,0 +1,37 @@
+﻿@using LeisnerCare.Infrastructure.Data
+@inject ApplicationDbContext DbContext
+
+@{
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    var patient = DbContext.Patients.FirstOrDefault(p => p.UserId == userId);
+
+    if (patient != null)
+    {
+        var now = DateTime.Now.TimeOfDay;
+        var upcomingMeds = DbContext.Medications
+            .Where(m => m.PatientId == patient.Id && m.TimeOfDay.HasValue)
+            .Where(m => m.TimeOfDay.Value > now && m.TimeOfDay.Value < now.Add(TimeSpan.FromHours(1)))
+            .ToList();
+
+        var untakenToday = DbContext.Medications
+            .Where(m => m.PatientId == patient.Id)
+            .Where(m => !m.Logs.Any(l => l.TakenAt.Date == DateTime.Today))
+            .ToList();
+
+        if (upcomingMeds.Any() || untakenToday.Any())
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <h5>⏰ Medicin påmindelse</h5>
+                @foreach (var med in upcomingMeds)
+                {
+                    <p>@med.Name @med.Dosage kl. @med.TimeOfDay?.ToString(@"hh\:mm")</p>
+                }
+                @if (untakenToday.Any())
+                {
+                    <p>Du har @untakenToday.Count medicin der ikke er taget i dag!</p>
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+    }
+}

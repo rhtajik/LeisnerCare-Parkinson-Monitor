@@ -8,12 +8,27 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeisnerCare.Web.styles.css" asp-append-version="true" />
     <style>
-        /* Parkinson-venligt UI - store klikbare områder */
-        .navbar-brand { font-size: 1.5rem; font-weight: bold; }
-        .nav-link { font-size: 1.1rem; padding: 0.75rem 1rem !important; }
-        .btn-nav { font-size: 1.1rem; padding: 0.5rem 1.5rem; }
-        .navbar { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            font-size: 1.1rem;
+            padding: 0.75rem 1rem !important;
+        }
+
+        .btn-nav {
+            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .navbar {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -49,6 +64,18 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-page="/Observations/Index">Observationer</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Staff/AuditTrail">Audit Trail</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Staff/Dashboard">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Staff/Export">Eksport</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Reports/PatientReport">Rapport</a>
+                                </li>
                             }
 
                             @if (User.IsInRole("Patient"))
@@ -62,7 +89,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-white" asp-page="/Observations/Index">Observationer</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Dashboard/Index">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-page="/Reports/Weekly">Ugeoversigt</a>
+                                </li>
                             }
+
                             @if (User.IsInRole("Patient") || User.IsInRole("Relative"))
                             {
                                 <li class="nav-item">
@@ -111,6 +145,10 @@
 
     <div class="container">
         <main role="main" class="pb-3">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <partial name="_NotificationPartial" />
+            }
             @RenderBody()
         </main>
     </div>

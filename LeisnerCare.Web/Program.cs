@@ -1,10 +1,13 @@
+using LeisnerCare.Application.Services;
 using LeisnerCare.Core.Entities;
 using LeisnerCare.Core.Interfaces;
 using LeisnerCare.Infrastructure.Data;
 using LeisnerCare.Infrastructure.Repositories;
-using LeisnerCare.Application.Services;
+using LeisnerCare.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using LeisnerCare.Web.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +52,14 @@ builder.Services.AddScoped<MedicationService>();
 
 builder.Services.AddScoped<IObservationRepository, ObservationRepository>();
 builder.Services.AddScoped<ObservationService>();
+
+
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<DashboardService>();
+
+builder.Services.AddScoped<AnalysisService>();
+
+builder.Services.AddScoped<ExportService>();
 
 // ============================================
 

@@ -1,0 +1,29 @@
+﻿@page
+@model LeisnerCare.Web.Pages.Staff.ExportModel
+@{
+    ViewData["Title"] = "Eksport";
+}
+
+<h1>Eksport til Excel</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4>Vælg patient og datatype</h4>
+
+        <form method="post" asp-page-handler="Symptoms" class="mb-3">
+            <div class="form-group mb-3">
+                <label>Patient</label>
+                <select name="patientId" asp-items="Model.Patients" class="form-control form-control-lg"></select>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg">📊 Download Symptomer (CSV)</button>
+        </form>
+
+        <form method="post" asp-page-handler="Medications">
+            <div class="form-group mb-3">
+                <label>Patient</label>
+                <select name="patientId" asp-items="Model.Patients" class="form-control form-control-lg"></select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">💊 Download Medicin (CSV)</button>
+        </form>
+    </div>
+</div>
